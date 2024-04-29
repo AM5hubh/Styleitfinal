@@ -1,0 +1,138 @@
+{% include 'base.html' %} {% block body %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous">
+    </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
+
+
+<style>
+    body {
+        background-color: #c8c8c878;
+    }
+
+    .primg2 {
+        max-height: 500px;
+        min-height: 200px;
+        min-width: 150px;
+        max-width: 450px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.805);
+    }
+
+    .primg2:hover {
+        box-shadow: 0 0 15px black;
+        transition: 202ms;
+    }
+    .prbor{
+        border: 2px solid rgb(84, 84, 84);
+        margin: 25px;
+        box-shadow: 0 0 10px rgb(1, 1, 1)k;
+    }
+    .btnproduct456{
+        border: 2px solid black !important; 
+        background-color: rgba(225, 225, 225, 0.316) !important;
+        position: relative;
+        
+      }
+      .btnproduct456:hover{
+        box-shadow: 0 0 5px rgb(15, 31, 49);
+        transition: 0.2s;
+      }
+      .card-title {
+        
+        margin-top: 5px;
+        color: black;
+        font-size: 40px;
+        font-family: "Times New Roman", Times, serif;
+        cursor: default;
+      }
+      .card-text {
+        color: black;
+        cursor: default;
+      }
+      /* .cardcont{
+        margin-left: 1px;
+      } */
+</style>
+
+<body>
+    <br><br><br>
+    <div class="">
+    <div class="container p-5">
+        <div class="row justify-content-center">
+            <div class="col-sm-10 col-md-6 col-lg-6 mb-5">
+
+                <img class="primg2" src="{{ shopIT.img.url }}" />
+            </div>
+            <div class="col-sm-10 col-md-7 col-lg-6 cardcont">
+                <h1 class="card-title">{{ shopIT.name }}</h1>
+                <br>
+                <p><h5>Description:</h5>{{ shopIT.description }}</p>
+                <h3 class="card-text">Rs: {{ shopIT.price }}</h3>
+                <br>
+                
+                <!-- <p class="card-text">ID-{{ shopIT.id }}</p> -->
+                
+                <button value="{{shopIT.id}}"  type="submit" class="btnproduct456 btn  m-2 add-cart" id="add-cart">Add to cart</button>
+                <button type="button" onclick="location.href = '/'" class="btnproduct456 btn m-2">Continue Shopping &raquo;</button>
+            </div>
+        </div>
+    </div>
+
+</div>     
+
+</body>
+<script>
+    // var a = document.getElementById('add-cart')
+    // console.log(a.value)
+    $(document).on('click', "#add-cart", function(e) {
+      
+      // console.log(id)
+      e.preventDefault();
+      // var id = $('#add-cart').val()
+      var ids = $(this).val();
+      console.log(ids)
+
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'cart_add' %}",
+        data: {
+          id: ids,
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          action:('post')
+          
+        },
+        
+        success: function(json) {
+          // console.log(json)
+          // console.log(json); // Log the JSON response from the server
+                // Ensure ShopIT_quantity is correctly referenced
+            // var ShopIT_quantity = document.getElementById("ShopIT_quantity");
+            document.getElementById("ShopIT_quantity");
+              textContent = json.qty;
+          //   if (ShopIT_quantity) {
+          //           // Correctly update the quantity display
+          //       ShopIT_quantity.textContent = json.qty;
+          // }
+        },
+        // Optionally, you can update the cart count or display a success message here
+      
+        error: function(xhr,errmsg,err) {
+          
+          // console.log(xhr)
+          // console.log(err)
+          // alert('An error occurred while adding the item to the cart.');
+        }
+      });
+    });
+</script>
+{% endblock %}
+ 
